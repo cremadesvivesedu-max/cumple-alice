@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Feliz Cumple, Alice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Figtree:wght@400;500;600&family=Caveat:wght@500;700&display=swap">
+<style>
+/* Layout: una "caja de regalo" nocturna — pantalla de PIN, luego menú de sobres que abren cada sección */
+:root{
+  --night:#1c0f1f; --plum:#2b1630; --plum2:#3a1e40;
+  --rose:#ff7aa2; --blush:#ffc9d8; --ink:#fbeff3; --muted:#c9a9b8; --gold:#f5c96a;
+  --display:"Gloock",Georgia,serif; --body:"Figtree",system-ui,sans-serif; --hand:"Caveat","Comic Sans MS",cursive;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--night);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  background-image:radial-gradient(circle at 20% 10%,#3a1838 0,transparent 45%),radial-gradient(circle at 85% 90%,#30142e 0,transparent 50%);
+  background-attachment:fixed}
+.wrap{max-width:560px;margin:0 auto;padding-block:32px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));min-height:100%;box-sizing:border-box}
+h1,h2{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0;line-height:1.1}
+h1{font-size:clamp(2.2rem,9vw,3.2rem)}
+h2{font-size:2rem}
+.hand{font-family:var(--hand);color:var(--blush);font-size:1.5rem;line-height:1.2}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+/* PIN */
+#lock{display:flex;flex-direction:column;align-items:center;text-align:center;gap:20px;padding-top:6vh}
+.heart{width:84px;height:84px;color:var(--rose);animation:beat 1.6s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.12)}30%{transform:scale(1)}45%{transform:scale(1.08)}}
+.dots{display:flex;gap:14px;margin:6px 0}
+.dots span{width:14px;height:14px;border-radius:50%;border:2px solid var(--blush);transition:background .15s}
+.dots span.on{background:var(--rose);border-color:var(--rose)}
+.dots.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.pad{display:grid;grid-template-columns:repeat(3,72px);gap:14px}
+.pad button{height:72px;border-radius:50%;border:1px solid #ffffff22;background:#ffffff0d;font-size:1.5rem;font-family:var(--display);transition:background .15s,transform .1s}
+.pad button:active{transform:scale(.94);background:#ff7aa233}
+.pad .ghost{border:none;background:none;font-family:var(--body);font-size:.9rem;color:var(--muted)}
+#msg{min-height:1.5em;color:var(--muted);font-size:.95rem}
+
+/* Menú */
+#home header{text-align:center;display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;font-size:.75rem;color:var(--gold)}
+.menu{display:grid;gap:14px}
+.env{display:flex;align-items:center;gap:16px;text-align:left;width:100%;padding:18px;border-radius:14px;border:1px solid #ffffff1a;background:linear-gradient(135deg,var(--plum),var(--plum2));transition:transform .15s,border-color .15s}
+.env:hover{transform:translateY(-2px);border-color:var(--rose)}
+.env .ic{flex:none;width:48px;height:48px;border-radius:12px;display:grid;place-items:center;background:#ff7aa222;color:var(--rose)}
+.env .ic svg{width:26px;height:26px}
+.env b{display:block;font-family:var(--display);font-weight:400;font-size:1.3rem}
+.env small{color:var(--muted);font-size:.9rem}
+
+/* Secciones */
+.sec{display:flex;flex-direction:column;gap:20px}
+.back{align-self:flex-start;background:none;border:none;color:var(--muted);padding:6px 0;font-size:.95rem}
+.back:hover{color:var(--ink)}
+.cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 22px;border-radius:999px;background:var(--rose);color:var(--night);font-weight:600;text-decoration:none;border:none}
+.list{display:grid;gap:2px;border-radius:14px;overflow:hidden}
+.list li{display:flex;gap:14px;align-items:baseline;padding:12px 16px;background:#ffffff0a}
+.list{list-style:none;margin:0;padding:0}
+.list .n{font-family:var(--display);color:var(--rose);width:1.4em;font-variant-numeric:tabular-nums}
+.list em{display:block;font-style:normal;color:var(--muted);font-size:.88rem}
+.note{font-size:.88rem;color:var(--muted);border-left:2px solid var(--gold);padding-left:12px}
+
+.gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.polaroid{background:var(--ink);color:var(--night);padding:8px 8px 6px;border-radius:4px;transform:rotate(var(--r,0deg));box-shadow:0 8px 20px #0006}
+.polaroid .ph{aspect-ratio:1;max-width:100%;background:linear-gradient(135deg,#f3c6d4,#e8a3bb);display:grid;place-items:center;color:#7a3552;font-size:.8rem;text-align:center;padding:8px;box-sizing:border-box}
+.polaroid img{display:block;width:100%;aspect-ratio:1;object-fit:cover}
+.polaroid p{margin:4px 0 0;font-family:var(--hand);font-size:1.25rem;text-align:center;line-height:1.1}
+
+.wide img{aspect-ratio:4/3}
+.polaroid img{max-width:100%}
+.vids{display:grid;gap:12px}
+.vids video{width:100%;max-height:70vh;border-radius:12px;background:#000}
+.vinyl{display:flex;align-items:center;gap:18px;padding:18px;border-radius:14px;background:linear-gradient(135deg,var(--plum),var(--plum2))}
+.vinyl b{display:block;font-family:var(--display);font-weight:400;font-size:1.6rem}
+.vinyl small{color:var(--muted)}
+.disc{flex:none;width:88px;height:88px;border-radius:50%;background:repeating-radial-gradient(circle,#111 0 2px,#1d1d1d 2px 4px);display:grid;place-items:center;animation:spin 6s linear infinite}
+.disc span{width:34px;height:34px;border-radius:50%;background:var(--rose);color:var(--night);font-family:var(--hand);font-size:.8rem;display:grid;place-items:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+.qbox{display:flex;flex-direction:column;gap:16px;padding:20px;border-radius:14px;background:#ffffff0a}
+.q{font-family:var(--display);font-size:1.4rem;margin:0;line-height:1.25}
+.opts{display:grid;gap:10px}
+.opts button{padding:14px 16px;text-align:left;border-radius:12px;border:1px solid #ffffff22;background:#ffffff0a;transition:background .2s}
+.opts button:hover:not(:disabled){border-color:var(--rose)}
+.opts .ok{background:#5fd39a33;border-color:#5fd39a}
+.opts .ko{background:#ff5a6a33;border-color:#ff5a6a}
+.big{font-size:2rem;margin:0}
+.tl{list-style:none;margin:0;padding:0 0 0 18px;border-left:2px solid #ff7aa255;display:grid;gap:22px}
+.tl li{position:relative;display:grid;gap:2px}
+.tl li::before{content:"";position:absolute;left:-26px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--rose);box-shadow:0 0 0 4px var(--night)}
+.tl .d{font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold)}
+.tl b{font-family:var(--display);font-weight:400;font-size:1.25rem}
+.tl p{margin:0;color:var(--muted)}
+.tlimgs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.tlimgs img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.flip{perspective:800px;background:none;border:none;padding:0;min-height:130px}
+.flip .in{position:relative;width:100%;height:100%;min-height:130px;transition:transform .5s;transform-style:preserve-3d}
+.flip.open .in{transform:rotateY(180deg)}
+.flip .f,.flip .b{position:absolute;inset:0;border-radius:12px;display:grid;place-items:center;padding:12px;backface-visibility:hidden;text-align:center}
+.flip .f{background:linear-gradient(135deg,var(--plum),var(--plum2));border:1px solid #ffffff1a;font-family:var(--display);font-size:2rem;color:var(--rose)}
+.flip .b{background:var(--blush);color:var(--night);transform:rotateY(180deg);font-size:.95rem;line-height:1.35}
+
+.coupon{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;border:2px dashed #ff7aa266;border-radius:12px;background:#ff7aa20d}
+.coupon b{font-family:var(--display);font-weight:400;font-size:1.15rem;display:block}
+.coupon small{color:var(--muted)}
+.coupon button{flex:none;padding:8px 14px;border-radius:999px;border:1px solid var(--rose);background:none;color:var(--rose);font-size:.85rem}
+.coupon.used{opacity:.5}
+.coupon.used button{background:var(--rose);color:var(--night)}
+
+.counter{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;text-align:center}
+.counter div{padding:14px 6px;border-radius:12px;background:#ffffff0a}
+.counter b{display:block;font-family:var(--display);font-size:1.8rem;font-weight:400;color:var(--gold);font-variant-numeric:tabular-nums}
+.counter small{color:var(--muted);font-size:.8rem}
+
+.fade{animation:fade .4s ease}
+@keyframes fade{from{opacity:.0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="h" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.9 4.5 6.6 4.5c2.1 0 3.6 1.2 4.4 2.5.8-1.3 2.3-2.5 4.4-2.5 3.7 0 5.7 3.9 4.2 7.3C19.5 16.4 12 21 12 21z"/></symbol>
+</svg>
+
+<main class="wrap">
+
+<!-- 1. PIN -->
+<section id="lock">
+  <svg class="heart"><use href="#h"/></svg>
+  <h1>Hola, Alice</h1>
+  <p class="hand">Esto es solo para ti.<br>Pon nuestro código secreto 🔒</p>
+  <div class="dots" id="dots"><span></span><span></span><span></span><span></span></div>
+  <p id="msg" aria-live="polite">Pista: nuestro día (DDMM) 💕</p>
+  <div class="pad" id="pad">
+    <button>1</button><button>2</button><button>3</button>
+    <button>4</button><button>5</button><button>6</button>
+    <button>7</button><button>8</button><button>9</button>
+    <span></span><button>0</button><button class="ghost" data-k="del">Borrar</button>
+  </div>
+</section>
+
+<!-- 2. MENÚ -->
+<section id="home" hidden>
+  <header>
+    <span class="eyebrow">27 · 10 · 2026</span>
+    <h1>Feliz cumpleaños, Alice</h1>
+    <p class="hand">Te he preparado unas sorpresas. Abre las que quieras.</p>
+  </header>
+  <div class="menu">
+    <button class="env" data-go="music"><span class="ic"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 18V6l11-2v12a3 3 0 1 1-2-2.8V7.4l-7 1.3V18a3 3 0 1 1-2-2.8z"/></svg></span><span><b>Nuestra banda sonora</b><small>Las canciones que son nuestras</small></span></button>
+    <button class="env" data-go="photos"><span class="ic"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1 12h14l-4.5-6-3.5 4.5-2.5-3z"/></svg></span><span><b>Nosotros</b><small>Fotos de momentos que me encantan</small></span></button>
+    <button class="env" data-go="quiz"><span class="ic"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 14a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4zm.1-10C9.9 6 8.5 7.3 8.4 9.2h2c.1-.8.7-1.3 1.6-1.3.9 0 1.6.6 1.6 1.4 0 .7-.4 1.1-1.3 1.7-1 .6-1.4 1.3-1.3 2.5v.5h2v-.4c0-.8.3-1.1 1.3-1.7 1-.6 1.6-1.4 1.6-2.7C15.9 7.3 14.3 6 12.1 6z"/></svg></span><span><b>¿Cuánto sabes de nosotros?</b><small>Un quiz solo apto para ti</small></span></button>
+    <button class="env" data-go="timeline"><span class="ic"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M11 2h2v4.2a3 3 0 0 1 0 5.6v4.4a3 3 0 0 1 0 5.6V22h-2v-.2a3 3 0 0 1 0-5.6v-4.4a3 3 0 0 1 0-5.6z"/></svg></span><span><b>Nuestra historia</b><small>Los momentos que nos trajeron hasta aquí</small></span></button>
+    <button class="env" data-go="coupons"><span class="ic"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/></svg></span><span><b>Vales canjeables</b><small>Regalos que puedes pedirme cuando quieras</small></span></button>
+    <button class="env" data-go="time"><span class="ic"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm1 5h-2v6l5 3 1-1.7-4-2.3z"/></svg></span><span><b>Nuestro tiempo juntos</b><small>Cuánto llevamos, al segundo</small></span></button>
+  </div>
+</section>
+
+<!-- 3. MÚSICA -->
+<section id="music" class="sec" hidden>
+  <button class="back" data-go="home">← Volver</button>
+  <h2>Nuestra banda sonora</h2>
+  <div class="vinyl"><div class="disc"><span>Alice</span></div><div><span class="eyebrow">Playlist</span><b>Alice</b><small>19 canciones que son nuestras</small></div></div>
+  <p class="hand">Dale al play y sigue mirando el resto de sorpresas.</p>
+  <a class="cta" href="https://open.spotify.com/playlist/3AjhhypsRxvCzOCo229GNB" target="_blank" rel="noopener">Escuchar en Spotify ↗</a>
+</section>
+
+<!-- 4. FOTOS -->
+<section id="photos" class="sec" hidden>
+  <button class="back" data-go="home">← Volver</button>
+  <h2>Nosotros</h2>
+  <figure class="polaroid wide" style="--r:-1deg;margin:0"><img src="media/donut.jpg" alt="Tú con un donut tapándote el ojo"><p>Mi favorita</p></figure>
+  <div class="gallery">
+    <figure class="polaroid" style="--r:1.5deg;margin:0"><img src="media/naranja.jpg" alt="Tú con una naranja en la boca"><p>Cara graciosa</p></figure>
+    <figure class="polaroid" style="--r:-2deg;margin:0"><img src="media/espejo.jpg" alt="Foto juntos en el espejo"></figure>
+    <figure class="polaroid" style="--r:-1.5deg;margin:0"><img src="media/calle.jpg" alt="Tú en la calle con la compra"></figure>
+    <figure class="polaroid" style="--r:2deg;margin:0"><img src="media/dumplings.jpg" alt="Cena de dumplings"></figure>
+  </div>
+  <h2 style="font-size:1.6rem;margin-top:12px">Vídeos graciosos</h2>
+  <div class="vids"><video src="media/video1.mp4" poster="media/poster.jpg" controls playsinline preload="metadata"></video></div>
+</section>
+
+<!-- 5. QUIZ -->
+<section id="quiz" class="sec" hidden>
+  <button class="back" data-go="home">← Volver</button>
+  <h2>¿Cuánto sabes de nosotros?</h2>
+  <div id="qbox" class="qbox" aria-live="polite"></div>
+</section>
+
+<!-- 6. LÍNEA DEL TIEMPO -->
+<section id="timeline" class="sec" hidden>
+  <button class="back" data-go="home">← Volver</button>
+  <h2>Nuestra historia</h2>
+  <ol class="tl" id="tl"></ol>
+</section>
+
+<!-- 6. VALES -->
+<section id="coupons" class="sec" hidden>
+  <button class="back" data-go="home">← Volver</button>
+  <h2>Vales canjeables</h2>
+  <p class="note">Enséñame la pantalla para canjear uno. Sin fecha de caducidad.</p>
+  <div class="menu" id="couponList"></div>
+</section>
+
+<!-- 7. TIEMPO -->
+<section id="time" class="sec" hidden>
+  <button class="back" data-go="home">← Volver</button>
+  <h2>Nuestro tiempo juntos</h2>
+  <p class="hand">Desde el día que empezó todo…</p>
+  <div class="counter">
+    <div><b id="cD">0</b><small>días</small></div>
+    <div><b id="cH">0</b><small>horas</small></div>
+    <div><b id="cM">0</b><small>minutos</small></div>
+  </div>
+  <p class="hand" style="text-align:center">…y lo que nos queda 💗</p>
+</section>
+
+</main>
+
+<script>
+/* ===== Personaliza aquí ===== */
+const PIN = "0307";                         // 3 de julio
+const START = new Date("2025-07-03T00:00"); // día que empezasteis (año por confirmar)
+const QUIZ = [ // [pregunta, [opciones], índice de la correcta]
+  ["¿Dónde nos conocimos?", ["En la biblioteca, estudiando muy concentrados","En el pub Defilee","En una cola del Albert Heijn"], 1],
+  ["¿Dónde fue nuestra primera cita?", ["En el Capital","En un McDonald's a las 3 de la mañana","En el cine viendo una peli de miedo"], 0],
+  ["¿Quién dijo «te quiero» primero?", ["Tú, sobria y valiente","Los dos a la vez, como en las pelis","Edu… borracho"], 2],
+  ["¿Cuál es la comida favorita de Edu?", ["Ensalada de lechuga sola","Pasta y sushi","Lo que te sobre del plato"], 1],
+  ["¿Y la tuya?", ["Naranjas enteras 🍊","Sushi","Donuts para taparte un ojo 🍩"], 1],
+  ["¿Cuál fue nuestro primer viaje juntos?", ["Agadir","Benidorm","Ikea un domingo por la tarde"], 0],
+  ["¿Cuál es «nuestra» canción?", ["Cumpleaños feliz","Despacito","Copenhague"], 2]
+];
+const FINAL = "¡Lo sabías todo! 💗 Ahora toca la primera parte de tu regalo 🎁";
+const TIMELINE = [ // [fecha, título, texto, [fotos]]
+  ["4 oct 2024", "Nos conocimos", "En el pub Defilee. Te pedí el Instagram dos veces, por si la primera no contaba."],
+  ["Oct 2024", "Nuestra primera cita", "En el Capital, un par de semanas después. Me dijiste que era muy directo… y mira dónde estamos."],
+  ["3 jul 2025", "Empezamos", "El día que empezó todo."],
+  ["24 mar 2026", "Nuestro primer viaje", "Agadir. Tú, más blanca que la arena de la playa.", ["media/agadir-noche.jpg","media/agadir-playa.jpg"]],
+  ["27 oct 2026", "Tu cumpleaños", "Y aquí seguimos, sumando momentos."]
+];
+const COUPONS = [
+  ["Una cena, invito yo", "Tú eliges el sitio"],
+  ["Un cine los dos", "Peli y palomitas incluidas"],
+  ["Un masaje", "Sin quejarme ni una vez"],
+  ["Desayuno en la cama", "El día que tú elijas"],
+  ["Me como lo que me cocines", "Un día, sin rechistar y sin poner caras"],
+  ["60 € en Urban Outfitters", "Para que te des un capricho"]
+];
+/* ============================ */
+
+const $ = s => document.querySelector(s);
+const views = ["lock","home","music","photos","quiz","timeline","coupons","time"];
+function go(id){ views.forEach(v => $("#"+v).hidden = v!==id); const el=$("#"+id); el.classList.remove("fade"); void el.offsetWidth; el.classList.add("fade"); scrollTo(0,0); }
+document.addEventListener("click", e => { const b=e.target.closest("[data-go]"); if(b) go(b.dataset.go); });
+
+let entry = "";
+const dots = [...document.querySelectorAll("#dots span")];
+function paint(){ dots.forEach((d,i)=>d.classList.toggle("on", i<entry.length)); }
+function press(k){
+  if(k==="del"){ entry=entry.slice(0,-1); paint(); return; }
+  if(entry.length>=4) return;
+  entry+=k; paint();
+  if(entry.length===4){
+    if(entry===PIN){ $("#msg").textContent="Bienvenida 💗"; try{sessionStorage.setItem("ok","1")}catch(e){} setTimeout(()=>go("home"),450); }
+    else { $("#msg").textContent="Casi… prueba otra vez"; $("#dots").classList.add("shake"); setTimeout(()=>{ $("#dots").classList.remove("shake"); entry=""; paint(); },450); }
+  }
+}
+$("#pad").addEventListener("click", e => { const b=e.target.closest("button"); if(b) press(b.dataset.k || b.textContent); });
+document.addEventListener("keydown", e => { if($("#lock").hidden) return; if(/^\d$/.test(e.key)) press(e.key); if(e.key==="Backspace") press("del"); });
+try{ if(sessionStorage.getItem("ok")) go("home"); }catch(e){}
+
+let qi=0, score=0;
+function drawQ(){
+  const box=$("#qbox");
+  if(qi>=QUIZ.length){ box.innerHTML=`<p class="eyebrow">${score} de ${QUIZ.length}</p><p class="hand big">${score===QUIZ.length?FINAL:"Casi… ¡otra vez!"}</p><button class="cta" id="qr">Repetir</button>`; $("#qr").onclick=()=>{qi=0;score=0;drawQ()}; return; }
+  const [q,opts]=QUIZ[qi];
+  box.innerHTML=`<p class="eyebrow">Pregunta ${qi+1} de ${QUIZ.length}</p><p class="q">${q}</p><div class="opts">${opts.map((o,i)=>`<button data-o="${i}">${o}</button>`).join("")}</div>`;
+}
+$("#qbox").addEventListener("click",e=>{ const b=e.target.closest("[data-o]"); if(!b||b.disabled) return; const ok=+b.dataset.o===QUIZ[qi][2];
+  document.querySelectorAll("#qbox [data-o]").forEach(x=>{x.disabled=true; if(+x.dataset.o===QUIZ[qi][2]) x.classList.add("ok");});
+  if(!ok) b.classList.add("ko"); else score++; setTimeout(()=>{qi++;drawQ()},900); });
+drawQ();
+$("#tl").innerHTML=TIMELINE.map(([d,t,x,imgs])=>`<li><span class="d">${d}</span><div><b>${t}</b><p>${x}</p>${imgs?`<div class="tlimgs">${imgs.map(u=>`<img src="${u}" alt="${t}">`).join("")}</div>`:""}</div></li>`).join("");
+
+let used = []; try{ used = JSON.parse(localStorage.getItem("used")||"[]"); }catch(e){}
+function drawCoupons(){
+  $("#couponList").innerHTML = COUPONS.map(([t,s],i)=>`<div class="coupon ${used.includes(i)?"used":""}"><span><b>${t}</b><small>${s}</small></span><button data-c="${i}">${used.includes(i)?"Canjeado":"Canjear"}</button></div>`).join("");
+}
+drawCoupons();
+$("#couponList").addEventListener("click", e => { const b=e.target.closest("[data-c]"); if(!b) return; const i=+b.dataset.c; used = used.includes(i)? used.filter(x=>x!==i) : [...used,i]; try{localStorage.setItem("used",JSON.stringify(used))}catch(e){} drawCoupons(); });
+
+function tick(){ const ms=Date.now()-START; $("#cD").textContent=Math.floor(ms/864e5).toLocaleString("es"); $("#cH").textContent=Math.floor(ms/36e5).toLocaleString("es"); $("#cM").textContent=Math.floor(ms/6e4).toLocaleString("es"); }
+tick(); setInterval(tick, 10000);
+</script>
+
+</body>
+</html>
